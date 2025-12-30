@@ -217,7 +217,9 @@ client.on('interactionCreate', async (interaction) => {
       };
 
       try {
-        if (interaction.replied || interaction.deferred) {
+        if (interaction.deferred) {
+          await interaction.editReply(errorMessage);
+        } else if (interaction.replied) {
           await interaction.followUp(errorMessage);
         } else {
           await interaction.reply(errorMessage);
