@@ -24,13 +24,22 @@ const basicAuth = (req, res, next) => {
   }
 
   try {
-    const base64Credentials = authHeader.split(' ')[1];
-    if (!base64Credentials) {
+    const headerParts = authHeader.split(' ');
+    if (headerParts.length !== 2 || !headerParts[1]) {
       res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
       return res.status(401).send('Invalid credentials');
     }
 
-    const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
+    const base64Credentials = headerParts[1];
+    let credentials;
+    
+    try {
+      credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
+    } catch (error) {
+      res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
+      return res.status(401).send('Invalid credentials');
+    }
+
     const colonIndex = credentials.indexOf(':');
     
     if (colonIndex === -1) {
@@ -41,14 +50,27 @@ const basicAuth = (req, res, next) => {
     const username = credentials.slice(0, colonIndex);
     const password = credentials.slice(colonIndex + 1);
 
-    // Use constant-time comparison to prevent timing attacks
     const expectedUsername = process.env.DASHBOARD_USERNAME;
     const expectedPassword = process.env.DASHBOARD_PASSWORD;
 
-    const usernameMatch = username.length === expectedUsername.length &&
-      crypto.timingSafeEqual(Buffer.from(username), Buffer.from(expectedUsername));
-    const passwordMatch = password.length === expectedPassword.length &&
-      crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expectedPassword));
+    // Pad strings to same length to prevent timing attacks from length comparison
+    const maxUsernameLen = Math.max(username.length, expectedUsername.length);
+    const maxPasswordLen = Math.max(password.length, expectedPassword.length);
+
+    const paddedUsername = username.padEnd(maxUsernameLen, '\0');
+    const paddedExpectedUsername = expectedUsername.padEnd(maxUsernameLen, '\0');
+    const paddedPassword = password.padEnd(maxPasswordLen, '\0');
+    const paddedExpectedPassword = expectedPassword.padEnd(maxPasswordLen, '\0');
+
+    // Use constant-time comparison to prevent timing attacks
+    const usernameMatch = crypto.timingSafeEqual(
+      Buffer.from(paddedUsername),
+      Buffer.from(paddedExpectedUsername)
+    );
+    const passwordMatch = crypto.timingSafeEqual(
+      Buffer.from(paddedPassword),
+      Buffer.from(paddedExpectedPassword)
+    );
 
     if (usernameMatch && passwordMatch) {
       return next();
