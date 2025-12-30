@@ -211,10 +211,16 @@ client.on('interactionCreate', async (interaction) => {
       });
     } catch (error) {
       console.error('Failed to create ticket:', error);
-      await interaction.reply({
+      const errorMessage = {
         content: '❌ Failed to create your ticket. Please try again later or contact an administrator.',
         ephemeral: true,
-      });
+      };
+      
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp(errorMessage);
+      } else {
+        await interaction.reply(errorMessage);
+      }
     }
     return;
   }
