@@ -216,10 +216,14 @@ client.on('interactionCreate', async (interaction) => {
         ephemeral: true,
       };
       
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp(errorMessage);
-      } else {
-        await interaction.reply(errorMessage);
+      try {
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp(errorMessage);
+        } else {
+          await interaction.reply(errorMessage);
+        }
+      } catch (replyError) {
+        console.error('Failed to send error message to user:', replyError);
       }
     }
     return;
