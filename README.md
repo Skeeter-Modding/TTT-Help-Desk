@@ -36,3 +36,18 @@ Run the dashboard server locally:
 npm run dashboard
 ```
 Then open `http://localhost:3000`.
+
+### Dashboard Security
+The dashboard displays sensitive ticket metrics and operations data intended for staff use only. To protect this information:
+
+**Authentication:**
+- Set `DASHBOARD_USERNAME` and `DASHBOARD_PASSWORD` in your `.env` file to enable HTTP Basic Authentication.
+- If these credentials are not configured, the dashboard will run without authentication and display a warning.
+- Use strong, unique credentials and change them regularly.
+
+**Deployment:**
+- **For production use:** Always enable authentication and deploy the dashboard behind a secure network (VPN, firewall, or internal network).
+- **For public-facing deployments:** Consider using additional security measures such as HTTPS, rate limiting, and IP whitelisting.
+- **Local development only:** If running locally for testing, authentication is optional but still recommended.
+
+⚠️ **Important:** The dashboard should never be exposed to the public internet without proper authentication and security measures in place.
