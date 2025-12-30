@@ -154,60 +154,68 @@ client.on('interactionCreate', async (interaction) => {
       },
     ];
 
-    const ticketChannel = await guild.channels.create({
-      name: ticketChannelName,
-      type: ChannelType.GuildText,
-      parent: ticketCategoryId,
-      permissionOverwrites: basePermissions,
-      topic: `TTT Help Desk ticket for ${interaction.user.tag} (${ticketId})`,
-    });
+    try {
+      const ticketChannel = await guild.channels.create({
+        name: ticketChannelName,
+        type: ChannelType.GuildText,
+        parent: ticketCategoryId,
+        permissionOverwrites: basePermissions,
+        topic: `TTT Help Desk ticket for ${interaction.user.tag} (${ticketId})`,
+      });
 
-    const staffChannel = await guild.channels.create({
-      name: staffChannelName,
-      type: ChannelType.GuildText,
-      parent: staffCategoryId,
-      permissionOverwrites: [
-        {
-          id: guild.roles.everyone,
-          deny: [PermissionFlagsBits.ViewChannel],
-        },
-        {
-          id: staffRoleId,
-          allow: [
-            PermissionFlagsBits.ViewChannel,
-            PermissionFlagsBits.SendMessages,
-            PermissionFlagsBits.ReadMessageHistory,
-          ],
-        },
-      ],
-      topic: `Private staff discussion for ticket ${ticketId}`,
-    });
+      const staffChannel = await guild.channels.create({
+        name: staffChannelName,
+        type: ChannelType.GuildText,
+        parent: staffCategoryId,
+        permissionOverwrites: [
+          {
+            id: guild.roles.everyone,
+            deny: [PermissionFlagsBits.ViewChannel],
+          },
+          {
+            id: staffRoleId,
+            allow: [
+              PermissionFlagsBits.ViewChannel,
+              PermissionFlagsBits.SendMessages,
+              PermissionFlagsBits.ReadMessageHistory,
+            ],
+          },
+        ],
+        topic: `Private staff discussion for ticket ${ticketId}`,
+      });
 
-    await ticketChannel.send({
-      content: [
-        `👋 Welcome, ${interaction.user}!`,
-        'A staff member will be with you shortly.',
-        selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
-      ]
-        .filter(Boolean)
-        .join('\n'),
-    });
+      await ticketChannel.send({
+        content: [
+          `👋 Welcome, ${interaction.user}!`,
+          'A staff member will be with you shortly.',
+          selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      });
 
-    await staffChannel.send({
-      content: [
-        `🗂️ Staff discussion channel for ticket **${ticketId}**.`,
-        `Ticket channel: ${ticketChannel}`,
-        `Opened by: ${interaction.user.tag}`,
-        selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
-      ]
-        .filter(Boolean)
-        .join('\n'),
-    });
+      await staffChannel.send({
+        content: [
+          `🗂️ Staff discussion channel for ticket **${ticketId}**.`,
+          `Ticket channel: ${ticketChannel}`,
+          `Opened by: ${interaction.user.tag}`,
+          selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      });
 
-    await interaction.reply({
-      content: `✅ Your ticket has been created: ${ticketChannel}`,
-      ephemeral: true,
-    });
+      await interaction.reply({
+        content: `✅ Your ticket has been created: ${ticketChannel}`,
+        ephemeral: true,
+      });
+    } catch (error) {
+      console.error('Failed to create ticket:', error);
+      await interaction.reply({
+        content: '❌ Failed to create your ticket. Please try again later or contact an administrator.',
+        ephemeral: true,
+      });
+    }
     return;
   }
 
