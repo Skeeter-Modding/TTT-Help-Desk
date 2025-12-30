@@ -1,0 +1,15 @@
+{
+  "name": "ttt-help-desk",
+  "version": "1.0.0",
+  "description": "TTT Help Desk Discord ticket bot with a professional dashboard.",
+  "main": "src/bot.js",
+  "scripts": {
+    "start": "node src/bot.js",
+    "dashboard": "node src/dashboard.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

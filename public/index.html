@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TTT Help Desk • Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand__logo">TTT</span>
+          <div>
+            <p class="brand__title">TTT Help Desk</p>
+            <p class="brand__subtitle">Ticket Command Center</p>
+          </div>
+        </div>
+        <nav class="nav">
+          <a class="nav__item nav__item--active" href="#">Overview</a>
+          <a class="nav__item" href="#">Queue</a>
+          <a class="nav__item" href="#">Playbooks</a>
+          <a class="nav__item" href="#">Automations</a>
+          <a class="nav__item" href="#">Staff</a>
+          <a class="nav__item" href="#">Insights</a>
+          <a class="nav__item" href="#">Settings</a>
+        </nav>
+        <div class="sidebar__footer">
+          <p class="sidebar__label">Quick actions</p>
+          <button class="sidebar__button">Invite TTT Help Desk</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">TTT Help Desk</p>
+            <h1>Operations Overview</h1>
+            <p class="muted">Monitor tickets, staff workload, and response SLAs at a glance.</p>
+          </div>
+          <div class="topbar__actions">
+            <button class="ghost-button">Docs</button>
+            <button class="primary-button">Configure Bot</button>
+          </div>
+        </header>
+
+        <section class="hero-card">
+          <div class="hero-card__info">
+            <div class="hero-card__logo">TTT</div>
+            <div>
+              <h2>TTT Help Desk</h2>
+              <p class="muted">Keep every ticket organized with a clean, staff-first workflow.</p>
+              <div class="badge">LIVE OPERATIONS</div>
+            </div>
+          </div>
+          <div class="hero-card__stats">
+            <div class="stat-chip">
+              <p class="stat-chip__value">2,322</p>
+              <p class="stat-chip__label">Community</p>
+            </div>
+            <div class="stat-chip">
+              <p class="stat-chip__value">12m</p>
+              <p class="stat-chip__label">Avg Response</p>
+            </div>
+            <div class="stat-chip">
+              <p class="stat-chip__value">4</p>
+              <p class="stat-chip__label">Active Queues</p>
+            </div>
+            <div class="stat-chip">
+              <p class="stat-chip__value">98%</p>
+              <p class="stat-chip__label">Resolution</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="ticket-cards">
+          <article class="ticket-card">
+            <p class="ticket-card__title">Total Tickets</p>
+            <p class="ticket-card__value">524</p>
+            <p class="ticket-card__meta">All time activity</p>
+          </article>
+          <article class="ticket-card ticket-card--open">
+            <p class="ticket-card__title">Open Tickets</p>
+            <p class="ticket-card__value">7</p>
+            <p class="ticket-card__meta">Waiting for staff</p>
+          </article>
+          <article class="ticket-card ticket-card--closed">
+            <p class="ticket-card__title">Resolved Today</p>
+            <p class="ticket-card__value">29</p>
+            <p class="ticket-card__meta">In the last 24h</p>
+          </article>
+        </section>
+
+        <section class="grid">
+          <article class="panel">
+            <div class="panel__header">
+              <h3>Queue Health</h3>
+              <span class="tag">Response Time</span>
+            </div>
+            <div class="radial-metric">
+              <div class="radial-metric__inner">
+                <p class="radial-metric__value">92%</p>
+                <p class="muted">SLA Met</p>
+              </div>
+            </div>
+            <div class="legend">
+              <div>
+                <span class="legend__dot legend__dot--open"></span>
+                On Track (44)
+              </div>
+              <div>
+                <span class="legend__dot legend__dot--closed"></span>
+                Needs Help (3)
+              </div>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="panel__header">
+              <h3>Daily Ticket Flow</h3>
+              <span class="tag">Week Snapshot</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar">
+                <span style="height: 40%"></span>
+                <span class="bar--secondary" style="height: 32%"></span>
+                <p>Mon</p>
+              </div>
+              <div class="bar">
+                <span style="height: 62%"></span>
+                <span class="bar--secondary" style="height: 48%"></span>
+                <p>Tue</p>
+              </div>
+              <div class="bar">
+                <span style="height: 76%"></span>
+                <span class="bar--secondary" style="height: 58%"></span>
+                <p>Wed</p>
+              </div>
+              <div class="bar">
+                <span style="height: 72%"></span>
+                <span class="bar--secondary" style="height: 56%"></span>
+                <p>Thu</p>
+              </div>
+              <div class="bar">
+                <span style="height: 78%"></span>
+                <span class="bar--secondary" style="height: 66%"></span>
+                <p>Fri</p>
+              </div>
+              <div class="bar">
+                <span style="height: 88%"></span>
+                <span class="bar--secondary" style="height: 72%"></span>
+                <p>Sat</p>
+              </div>
+              <div class="bar">
+                <span style="height: 46%"></span>
+                <span class="bar--secondary" style="height: 38%"></span>
+                <p>Sun</p>
+              </div>
+            </div>
+            <div class="chart-key">
+              <div><span class="legend__dot legend__dot--open"></span> Opened</div>
+              <div><span class="legend__dot legend__dot--closed"></span> Resolved</div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
