@@ -6,6 +6,9 @@ Professional Discord ticket bot for the TTT gaming community with a clean, easy-
 - Automatically opens a private staff discussion channel per ticket.
 - Routes tickets to the correct staff role based on selection.
 - Clean, dark dashboard UI with a red/black community theme.
+- `/ticket` slash command that creates a ticket channel for the player.
+- Automatically opens a private staff discussion channel per ticket.
+- Clean, dark dashboard UI inspired by modern ticketing tools.
 - Simple configuration via `.env`.
 
 ## Setup

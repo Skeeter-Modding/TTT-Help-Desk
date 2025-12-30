@@ -6,11 +6,13 @@ const {
   ActionRowBuilder,
   StringSelectMenuBuilder,
 } = require('discord.js');
+const { Client, GatewayIntentBits, ChannelType, PermissionFlagsBits } = require('discord.js');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
 const requiredEnv = ['DISCORD_TOKEN', 'GUILD_ID', 'STAFF_ROLE_ID', 'PANEL_CHANNEL_ID'];
+const requiredEnv = ['DISCORD_TOKEN', 'GUILD_ID', 'STAFF_ROLE_ID'];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 
 if (missingEnv.length > 0) {
@@ -73,6 +75,18 @@ client.once('ready', async () => {
   const guild = await client.guilds.fetch(process.env.GUILD_ID);
   await guild.commands.set([
     {
+      name: 'ticket',
+      description: 'Open a support ticket with the TTT Help Desk.',
+      options: [
+        {
+          name: 'issue',
+          description: 'Briefly describe your issue.',
+          type: 3,
+          required: false,
+        },
+      ],
+    },
+    {
       name: 'close',
       description: 'Close the current ticket channel.',
     },
@@ -125,6 +139,19 @@ client.on('interactionCreate', async (interaction) => {
     const selectedValue = interaction.values[0];
     const selectedRoute = ticketRouting.find((route) => route.value === selectedValue);
     const staffRoleId = selectedRoute?.staffRoleId || process.env.STAFF_ROLE_ID;
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) {
+    return;
+  }
+
+  if (interaction.commandName === 'ticket') {
+    const guild = interaction.guild;
+    const member = interaction.member;
+    const staffRoleId = process.env.STAFF_ROLE_ID;
+    const ticketCategoryId = process.env.TICKET_CATEGORY_ID || null;
+    const staffCategoryId = process.env.STAFF_PRIVATE_CATEGORY_ID || ticketCategoryId;
 
     const ticketId = createTicketId();
     const channelSlug = sanitizeChannelName(interaction.user.username) || 'player';
@@ -183,11 +210,13 @@ client.on('interactionCreate', async (interaction) => {
       topic: `Private staff discussion for ticket ${ticketId}`,
     });
 
+    const issue = interaction.options.getString('issue');
     await ticketChannel.send({
       content: [
         `👋 Welcome, ${interaction.user}!`,
         'A staff member will be with you shortly.',
         selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
+        issue ? `**Issue:** ${issue}` : null,
       ]
         .filter(Boolean)
         .join('\n'),
@@ -199,6 +228,7 @@ client.on('interactionCreate', async (interaction) => {
         `Ticket channel: ${ticketChannel}`,
         `Opened by: ${interaction.user.tag}`,
         selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
+        issue ? `**Issue:** ${issue}` : null,
       ]
         .filter(Boolean)
         .join('\n'),
@@ -212,6 +242,9 @@ client.on('interactionCreate', async (interaction) => {
   }
 
   if (interaction.isChatInputCommand() && interaction.commandName === 'close') {
+  }
+
+  if (interaction.commandName === 'close') {
     const staffRoleId = process.env.STAFF_ROLE_ID;
 
     if (!interaction.member.roles.cache.has(staffRoleId)) {
