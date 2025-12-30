@@ -19,34 +19,34 @@
           <span class="brand__logo">TTT</span>
           <div>
             <p class="brand__title">TTT Help Desk</p>
-            <p class="brand__subtitle">Server Dashboard</p>
+            <p class="brand__subtitle">Ticket Command Center</p>
           </div>
         </div>
         <nav class="nav">
-          <a class="nav__item nav__item--active" href="#">Home</a>
-          <a class="nav__item" href="#">Panels</a>
-          <a class="nav__item" href="#">Templates</a>
-          <a class="nav__item" href="#">Ticket History</a>
-          <a class="nav__item" href="#">Custom Commands</a>
-          <a class="nav__item" href="#">Statistics</a>
+          <a class="nav__item nav__item--active" href="#">Overview</a>
+          <a class="nav__item" href="#">Queue</a>
+          <a class="nav__item" href="#">Playbooks</a>
+          <a class="nav__item" href="#">Automations</a>
+          <a class="nav__item" href="#">Staff</a>
+          <a class="nav__item" href="#">Insights</a>
           <a class="nav__item" href="#">Settings</a>
         </nav>
         <div class="sidebar__footer">
-          <p class="sidebar__label">Need help?</p>
-          <button class="sidebar__button">Invite Bot</button>
+          <p class="sidebar__label">Quick actions</p>
+          <button class="sidebar__button">Invite TTT Help Desk</button>
         </div>
       </aside>
 
       <main class="main">
         <header class="topbar">
           <div>
-            <p class="eyebrow">Overview</p>
-            <h1>Home</h1>
-            <p class="muted">Track ticket volume, staff activity, and system health.</p>
+            <p class="eyebrow">TTT Help Desk</p>
+            <h1>Operations Overview</h1>
+            <p class="muted">Monitor tickets, staff workload, and response SLAs at a glance.</p>
           </div>
           <div class="topbar__actions">
-            <button class="ghost-button">Documentation</button>
-            <button class="primary-button">Launch Dashboard</button>
+            <button class="ghost-button">Docs</button>
+            <button class="primary-button">Configure Bot</button>
           </div>
         </header>
 
@@ -55,26 +55,26 @@
             <div class="hero-card__logo">TTT</div>
             <div>
               <h2>TTT Help Desk</h2>
-              <p class="muted">Professional ticketing for your Discord community.</p>
-              <div class="badge">PREMIUM UI</div>
+              <p class="muted">Keep every ticket organized with a clean, staff-first workflow.</p>
+              <div class="badge">LIVE OPERATIONS</div>
             </div>
           </div>
           <div class="hero-card__stats">
             <div class="stat-chip">
               <p class="stat-chip__value">2,322</p>
-              <p class="stat-chip__label">Members</p>
+              <p class="stat-chip__label">Community</p>
             </div>
             <div class="stat-chip">
-              <p class="stat-chip__value">71</p>
-              <p class="stat-chip__label">Channels</p>
+              <p class="stat-chip__value">12m</p>
+              <p class="stat-chip__label">Avg Response</p>
             </div>
             <div class="stat-chip">
-              <p class="stat-chip__value">14</p>
-              <p class="stat-chip__label">Staff</p>
+              <p class="stat-chip__value">4</p>
+              <p class="stat-chip__label">Active Queues</p>
             </div>
             <div class="stat-chip">
-              <p class="stat-chip__value">24</p>
-              <p class="stat-chip__label">Bots</p>
+              <p class="stat-chip__value">98%</p>
+              <p class="stat-chip__label">Resolution</p>
             </div>
           </div>
         </section>
@@ -83,88 +83,88 @@
           <article class="ticket-card">
             <p class="ticket-card__title">Total Tickets</p>
             <p class="ticket-card__value">524</p>
-            <p class="ticket-card__meta">All time</p>
+            <p class="ticket-card__meta">All time activity</p>
           </article>
           <article class="ticket-card ticket-card--open">
             <p class="ticket-card__title">Open Tickets</p>
             <p class="ticket-card__value">7</p>
-            <p class="ticket-card__meta">Awaiting response</p>
+            <p class="ticket-card__meta">Waiting for staff</p>
           </article>
           <article class="ticket-card ticket-card--closed">
-            <p class="ticket-card__title">Closed Tickets</p>
-            <p class="ticket-card__value">517</p>
-            <p class="ticket-card__meta">Last 30 days</p>
+            <p class="ticket-card__title">Resolved Today</p>
+            <p class="ticket-card__value">29</p>
+            <p class="ticket-card__meta">In the last 24h</p>
           </article>
         </section>
 
         <section class="grid">
           <article class="panel">
             <div class="panel__header">
-              <h3>Ticket Distribution</h3>
-              <span class="tag">Open vs Closed</span>
+              <h3>Queue Health</h3>
+              <span class="tag">Response Time</span>
             </div>
-            <div class="donut">
-              <div class="donut__inner">
-                <p class="donut__value">524</p>
-                <p class="muted">Total</p>
+            <div class="radial-metric">
+              <div class="radial-metric__inner">
+                <p class="radial-metric__value">92%</p>
+                <p class="muted">SLA Met</p>
               </div>
             </div>
             <div class="legend">
               <div>
                 <span class="legend__dot legend__dot--open"></span>
-                Open (7)
+                On Track (44)
               </div>
               <div>
                 <span class="legend__dot legend__dot--closed"></span>
-                Closed (517)
+                Needs Help (3)
               </div>
             </div>
           </article>
           <article class="panel">
             <div class="panel__header">
-              <h3>Last 7 Days Activity</h3>
-              <span class="tag">Peak: Saturday</span>
+              <h3>Daily Ticket Flow</h3>
+              <span class="tag">Week Snapshot</span>
             </div>
             <div class="bar-chart">
               <div class="bar">
-                <span style="height: 35%"></span>
-                <span class="bar--secondary" style="height: 25%"></span>
+                <span style="height: 40%"></span>
+                <span class="bar--secondary" style="height: 32%"></span>
                 <p>Mon</p>
               </div>
               <div class="bar">
-                <span style="height: 55%"></span>
-                <span class="bar--secondary" style="height: 40%"></span>
+                <span style="height: 62%"></span>
+                <span class="bar--secondary" style="height: 48%"></span>
                 <p>Tue</p>
               </div>
               <div class="bar">
-                <span style="height: 70%"></span>
-                <span class="bar--secondary" style="height: 60%"></span>
+                <span style="height: 76%"></span>
+                <span class="bar--secondary" style="height: 58%"></span>
                 <p>Wed</p>
               </div>
               <div class="bar">
-                <span style="height: 65%"></span>
-                <span class="bar--secondary" style="height: 52%"></span>
+                <span style="height: 72%"></span>
+                <span class="bar--secondary" style="height: 56%"></span>
                 <p>Thu</p>
               </div>
               <div class="bar">
-                <span style="height: 75%"></span>
-                <span class="bar--secondary" style="height: 65%"></span>
+                <span style="height: 78%"></span>
+                <span class="bar--secondary" style="height: 66%"></span>
                 <p>Fri</p>
               </div>
               <div class="bar">
-                <span style="height: 95%"></span>
-                <span class="bar--secondary" style="height: 80%"></span>
+                <span style="height: 88%"></span>
+                <span class="bar--secondary" style="height: 72%"></span>
                 <p>Sat</p>
               </div>
               <div class="bar">
-                <span style="height: 40%"></span>
-                <span class="bar--secondary" style="height: 35%"></span>
+                <span style="height: 46%"></span>
+                <span class="bar--secondary" style="height: 38%"></span>
                 <p>Sun</p>
               </div>
             </div>
             <div class="chart-key">
               <div><span class="legend__dot legend__dot--open"></span> Opened</div>
-              <div><span class="legend__dot legend__dot--closed"></span> Closed</div>
+              <div><span class="legend__dot legend__dot--closed"></span> Resolved</div>
             </div>
           </article>
         </section>
