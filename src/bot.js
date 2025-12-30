@@ -215,7 +215,7 @@ client.on('interactionCreate', async (interaction) => {
         content: '❌ Failed to create your ticket. Please try again later or contact an administrator.',
         ephemeral: true,
       };
-      
+
       try {
         if (interaction.replied || interaction.deferred) {
           await interaction.followUp(errorMessage);
