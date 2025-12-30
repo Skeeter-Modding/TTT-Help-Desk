@@ -1,8 +1,17 @@
+const {
+  Client,
+  GatewayIntentBits,
+  ChannelType,
+  PermissionFlagsBits,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+} = require('discord.js');
 const { Client, GatewayIntentBits, ChannelType, PermissionFlagsBits } = require('discord.js');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
+const requiredEnv = ['DISCORD_TOKEN', 'GUILD_ID', 'STAFF_ROLE_ID', 'PANEL_CHANNEL_ID'];
 const requiredEnv = ['DISCORD_TOKEN', 'GUILD_ID', 'STAFF_ROLE_ID'];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 
@@ -18,6 +27,39 @@ const client = new Client({
 const createTicketId = () => {
   const now = Date.now().toString();
   return now.slice(-6);
+};
+
+const parseTicketRouting = () => {
+  if (!process.env.TICKET_ROUTING) {
+    return [
+      {
+        label: 'General Support',
+        value: 'general',
+        staffRoleId: process.env.STAFF_ROLE_ID,
+      },
+    ];
+  }
+
+  try {
+    const parsed = JSON.parse(process.env.TICKET_ROUTING);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      throw new Error('TICKET_ROUTING must be a non-empty array.');
+    }
+    return parsed.map((route) => ({
+      label: route.label || 'Support',
+      value: route.value || 'support',
+      staffRoleId: route.staffRoleId || process.env.STAFF_ROLE_ID,
+    }));
+  } catch (error) {
+    console.error('Invalid TICKET_ROUTING JSON. Falling back to default routing.', error);
+    return [
+      {
+        label: 'General Support',
+        value: 'general',
+        staffRoleId: process.env.STAFF_ROLE_ID,
+      },
+    ];
+  }
 };
 
 const sanitizeChannelName = (name) =>
@@ -49,6 +91,54 @@ client.once('ready', async () => {
       description: 'Close the current ticket channel.',
     },
   ]);
+
+  const panelChannel = await guild.channels.fetch(process.env.PANEL_CHANNEL_ID);
+  if (!panelChannel || panelChannel.type !== ChannelType.GuildText) {
+    console.error('PANEL_CHANNEL_ID must point to a text channel.');
+    return;
+  }
+
+  const ticketRouting = parseTicketRouting();
+  const selectMenu = new StringSelectMenuBuilder()
+    .setCustomId('ticket-panel')
+    .setPlaceholder('Select a ticket type')
+    .addOptions(
+      ticketRouting.map((route) => ({
+        label: route.label,
+        value: route.value,
+      }))
+    );
+
+  const panelMessage = {
+    content: [
+      '🎫 **TTT Help Desk**',
+      'Select the ticket type below to open a private support channel.',
+    ].join('\n'),
+    components: [new ActionRowBuilder().addComponents(selectMenu)],
+  };
+
+  if (process.env.PANEL_MESSAGE_ID) {
+    try {
+      const existing = await panelChannel.messages.fetch(process.env.PANEL_MESSAGE_ID);
+      await existing.edit(panelMessage);
+      return;
+    } catch (error) {
+      console.warn('Unable to edit PANEL_MESSAGE_ID message. Sending a new panel.', error);
+    }
+  }
+
+  await panelChannel.send(panelMessage);
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (interaction.isStringSelectMenu() && interaction.customId === 'ticket-panel') {
+    const guild = interaction.guild;
+    const ticketCategoryId = process.env.TICKET_CATEGORY_ID || null;
+    const staffCategoryId = process.env.STAFF_PRIVATE_CATEGORY_ID || ticketCategoryId;
+    const ticketRouting = parseTicketRouting();
+    const selectedValue = interaction.values[0];
+    const selectedRoute = ticketRouting.find((route) => route.value === selectedValue);
+    const staffRoleId = selectedRoute?.staffRoleId || process.env.STAFF_ROLE_ID;
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -125,6 +215,7 @@ client.on('interactionCreate', async (interaction) => {
       content: [
         `👋 Welcome, ${interaction.user}!`,
         'A staff member will be with you shortly.',
+        selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
         issue ? `**Issue:** ${issue}` : null,
       ]
         .filter(Boolean)
@@ -136,6 +227,7 @@ client.on('interactionCreate', async (interaction) => {
         `🗂️ Staff discussion channel for ticket **${ticketId}**.`,
         `Ticket channel: ${ticketChannel}`,
         `Opened by: ${interaction.user.tag}`,
+        selectedRoute ? `**Type:** ${selectedRoute.label}` : null,
         issue ? `**Issue:** ${issue}` : null,
       ]
         .filter(Boolean)
@@ -146,6 +238,10 @@ client.on('interactionCreate', async (interaction) => {
       content: `✅ Your ticket has been created: ${ticketChannel}`,
       ephemeral: true,
     });
+    return;
+  }
+
+  if (interaction.isChatInputCommand() && interaction.commandName === 'close') {
   }
 
   if (interaction.commandName === 'close') {
