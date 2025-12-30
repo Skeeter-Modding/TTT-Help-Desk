@@ -98,7 +98,7 @@ body {
   cursor: pointer;
 }
 
-.sidebar__button[aria-disabled="true"] {
+.sidebar__button:disabled {
   background: #3a2a30;
   color: #7c7c92;
   cursor: not-allowed;
@@ -144,7 +144,7 @@ body {
   cursor: pointer;
 }
 
-.ghost-button[aria-disabled="true"] {
+.ghost-button:disabled {
   border-color: #1f1f26;
   color: #7c7c92;
   cursor: not-allowed;
@@ -161,7 +161,7 @@ body {
   cursor: pointer;
 }
 
-.primary-button[aria-disabled="true"] {
+.primary-button:disabled {
   background: #3a2a30;
   color: #7c7c92;
   cursor: not-allowed;
