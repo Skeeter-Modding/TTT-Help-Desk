@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
+const crypto = require('crypto');
 
 dotenv.config();
 
@@ -22,16 +23,43 @@ const basicAuth = (req, res, next) => {
     return res.status(401).send('Authentication required');
   }
 
-  const base64Credentials = authHeader.split(' ')[1];
-  const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
-  const [username, password] = credentials.split(':');
+  try {
+    const base64Credentials = authHeader.split(' ')[1];
+    if (!base64Credentials) {
+      res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
+      return res.status(401).send('Invalid credentials');
+    }
 
-  if (username === process.env.DASHBOARD_USERNAME && password === process.env.DASHBOARD_PASSWORD) {
-    return next();
+    const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
+    const colonIndex = credentials.indexOf(':');
+    
+    if (colonIndex === -1) {
+      res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
+      return res.status(401).send('Invalid credentials');
+    }
+
+    const username = credentials.slice(0, colonIndex);
+    const password = credentials.slice(colonIndex + 1);
+
+    // Use constant-time comparison to prevent timing attacks
+    const expectedUsername = process.env.DASHBOARD_USERNAME;
+    const expectedPassword = process.env.DASHBOARD_PASSWORD;
+
+    const usernameMatch = username.length === expectedUsername.length &&
+      crypto.timingSafeEqual(Buffer.from(username), Buffer.from(expectedUsername));
+    const passwordMatch = password.length === expectedPassword.length &&
+      crypto.timingSafeEqual(Buffer.from(password), Buffer.from(expectedPassword));
+
+    if (usernameMatch && passwordMatch) {
+      return next();
+    }
+
+    res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
+    return res.status(401).send('Invalid credentials');
+  } catch (error) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
+    return res.status(401).send('Invalid credentials');
   }
-
-  res.setHeader('WWW-Authenticate', 'Basic realm="TTT Help Desk Dashboard"');
-  return res.status(401).send('Invalid credentials');
 };
 
 // Apply authentication to all routes
